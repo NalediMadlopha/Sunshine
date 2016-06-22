@@ -17,8 +17,6 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +39,6 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            // Once the root view for the Fragment has been created, it's
-            // the ListView with some dummy data.
-
-            // Create some dummy data for the ListView. Here's a sample were
-            // represented as "day, whether, high/low"
-
             String forecastArray[] = {
                     "Today - Sunny - 88/63",
                     "Tomorrow - Foggy - 70/40",
@@ -61,9 +53,6 @@ public class MainActivity extends ActionBarActivity {
                     Arrays.asList(forecastArray)
             );
 
-            // Now that we have some dummy forecast data, create an ArrayAdapter.
-            // The ArrayAdapter will take data from a source (like our dummy forecast list)
-            // use it to populate the ListView it's attached to.
             mForecastAdapter = new ArrayAdapter<String>(
                     // The current context (this fragment's parent activity
                     getActivity(),
