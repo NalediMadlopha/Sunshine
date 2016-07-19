@@ -4,6 +4,7 @@
     <!-- Menu label to fetch updated weather info from the server -->
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="action_map" translatable="false">Map</string>
+    <string name="action_share" translatable="false">Share </string>
     <string name="details_activity_settings" translatable="false">Details</string>
     <string name="title_activity_settings" translatable="false">Settings</string>
 
