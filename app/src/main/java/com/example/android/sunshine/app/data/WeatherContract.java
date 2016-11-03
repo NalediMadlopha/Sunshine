@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
  * TODO: Add a class header comment!
  */
 
-public class WeatherClass {
+public class WeatherContract {
 
     /* Inner class that defines the table contents of the weather table */
     public static final class WeatherEntry implements BaseColumns {
