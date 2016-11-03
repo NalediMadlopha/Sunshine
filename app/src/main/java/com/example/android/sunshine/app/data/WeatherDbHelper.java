@@ -17,12 +17,16 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "weather.db";
 
+    public WeatherDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
     public WeatherDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         // Create a table to hold locations. A location consists of a postal code
         // and a human-recognizable name (e.g "Mountain View")
@@ -34,7 +38,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 LocationEntry.COLUMN_LOCATION_SETTING + " TEXT NOT NULL, " +
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
                 LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
-                LocationEntry.COLUMN_COORD_LANG + " REAL NOT NULL," +
+                LocationEntry.COLUMN_COORD_LONG + " REAL NOT NULL," +
                 "UNIQUE (" + LocationEntry.COLUMN_LOCATION_SETTING + ") ON CONFLICT IGNORE);";
 
         final String SQL_CREATE_WEATHER_TABLE =
@@ -64,10 +68,15 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 // per location, it's created a UNIQUE constraint with REPLACE strategy
                 " UNIQUE (" + WeatherEntry.COLUMN_DATETEXT + ", " +
                 WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
+
+        sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LocationEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WeatherEntry.TABLE_NAME);
+        onCreate(sqLiteDatabase);
     }
 }
