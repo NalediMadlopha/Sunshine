@@ -4,6 +4,11 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
+import static android.provider.Settings.System.DATE_FORMAT;
+
 /**
  * Created by Naledi Madlopha on 2016/11/03.
  * TODO: Add a class header comment!
@@ -25,6 +30,13 @@ public class WeatherContract {
 
     // Possible paths (appended to base content URI for possible URI's)
     public static final String PATH_WEATHER = "weather";
+
+    public static String getDbDateString(Date date) {
+        // Because the API returns a unix timestamp (measured in seconds),
+        // it must be converted to milliseconds in order to be converted to valid date
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        return sdf.format(date);
+    }
 
     /* Inner class that defines the table contents of the weather table */
     public static final class WeatherEntry implements BaseColumns {
