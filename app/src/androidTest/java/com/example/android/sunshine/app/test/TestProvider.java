@@ -28,12 +28,9 @@ public class TestProvider extends AndroidTestCase {
 //        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
 //    }
 
-
-
     public static String TEST_CITY_NAME = "North Pole";
     public static String TEST_LOCATION = "99705";
     public static String TEST_DATE = "20161201";
-
 
     public static ContentValues getLocationContentValues() {
         ContentValues values = new ContentValues();
@@ -146,6 +143,8 @@ public class TestProvider extends AndroidTestCase {
                     null, // values for "where" clause
                     null  // sort order
             );
+
+            Log.d(LOG_TAG, weatherCursor.toString());
 
             weatherCursor.close();
 
