@@ -30,7 +30,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
     private static final int FORECAST_LOADER = 0;
 
-    private SimpleCursorAdapter mForecastAdapter;
+    private ForecastAdapter mForecastAdapter;
     private ListView mListView;
 
     private String mLocation;
@@ -98,25 +98,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mForecastAdapter = new SimpleCursorAdapter(
-                // The current context (this fragment's parent activity
-                getActivity(),
-                // ID of list item layout
-                R.layout.list_item_forecast,
+        mForecastAdapter = new ForecastAdapter(
+          getActivity(),
                 null,
-                // These are column name
-                new String[] {
-                        WeatherContract.WeatherEntry.COLUMN_DATETEXT,
-                        WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
-                        WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
-                        WeatherContract.WeatherEntry.COLUMN_MIN_TEMP
-                },
-                new int[] {
-                        R.id.list_item_date_textview,
-                        R.id.list_item_forecast_textview,
-                        R.id.list_item_high_textview,
-                        R.id.list_item_low_textview
-                },
                 0
         );
 
@@ -128,7 +112,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SimpleCursorAdapter adapter = (SimpleCursorAdapter) parent.getAdapter();
+                ForecastAdapter adapter = (ForecastAdapter) parent.getAdapter();
                 Cursor cursor = adapter.getCursor();
 
                 if (null != cursor && cursor.moveToPosition(position)) {
