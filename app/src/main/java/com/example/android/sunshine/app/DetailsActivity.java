@@ -1,28 +1,10 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.example.android.sunshine.app.data.LocationContract;
-import com.example.android.sunshine.app.data.WeatherContract;
 
 public class DetailsActivity extends ActionBarActivity {
 
@@ -36,8 +18,18 @@ public class DetailsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_details);
 
         if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction
+            String date = getIntent().getStringExtra(DATE_KEY);
+
+            Bundle arguments = new Bundle();
+            arguments.putString(DetailsActivity.DATE_KEY, date);
+
+            DetailsFragment fragment = new DetailsFragment();
+            fragment.setArguments(arguments);
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.details_container, new DetailFragment())
+                    .add(R.id.weather_detail_container, fragment)
                     .commit();
         }
     }

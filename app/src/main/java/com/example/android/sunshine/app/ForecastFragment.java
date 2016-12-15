@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.sunshine.app.data.LocationContract;
 import com.example.android.sunshine.app.data.WeatherContract;
@@ -29,7 +30,6 @@ import java.util.Date;
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
     private static final int FORECAST_LOADER = 0;
-
     private ForecastAdapter mForecastAdapter;
     private ListView mListView;
 
@@ -49,7 +49,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
             WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
             WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_LOC_KEY
+            LocationContract.LocationEntry.COLUMN_LOCATION_SETTING,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
+            LocationContract.LocationEntry.COLUMN_COORD_LAT,
+            LocationContract.LocationEntry.COLUMN_COORD_LONG
     };
 
     // These indices are tied to FORECAST_COLUMNS. If FORECAST_COLUMNS changes, these
@@ -60,6 +63,22 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public static final int COL_WEATHER_MAX_TEMP = 3;
     public static final int COL_WEATHER_MIN_TEMP = 4;
     public static final int COL_LOCATION_SETTING = 5;
+    public static final int COL_WEATHER_CONDITION_ID = 6;
+    public static final int COL_COORD_LAT = 7;
+    public static final int COL_COORD_LONG = 8;
+
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanisms allows activities to be notified of item
+     * selections
+     */
+    public interface Callback {
+        /**
+         * DetailsFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(String date);
+    }
 
     public ForecastFragment() {
     }
@@ -98,11 +117,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mForecastAdapter = new ForecastAdapter(
-          getActivity(),
-                null,
-                0
-        );
+        mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -112,13 +127,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ForecastAdapter adapter = (ForecastAdapter) parent.getAdapter();
-                Cursor cursor = adapter.getCursor();
+                Cursor cursor = mForecastAdapter.getCursor();
 
-                if (null != cursor && cursor.moveToPosition(position)) {
-                    Intent intent = new Intent(getActivity(), DetailsActivity.class)
-                            .putExtra(DetailsActivity.DATE_KEY, cursor.getString(COL_WEATHER_DATE));
-                    startActivity(intent);
+                if (cursor != null && cursor.moveToPosition(position)) {
+                    ((Callback) getActivity())
+                            .onItemSelected(cursor.getString(COL_WEATHER_DATE));
                 }
             }
         });
